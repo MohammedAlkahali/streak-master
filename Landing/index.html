@@ -1,147 +1,107 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Document metadata -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Streak Master</title>
-  <link rel="stylesheet" href="css/bootstrap.min.css" />
-  <link rel="stylesheet" href="css/fontawesome.css" />
-  <style>
-    body {
-      background: linear-gradient(to top right, #fbcfe8, #d8b4fe, #bfdbfe);
-      font-family: 'Segoe UI', sans-serif;
-    }
 
-    .main-header {
-      background-color: white;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    }
-
-    .logo-img {
-      max-height: 60px;
-    }
-    
-
-    nav a {
-      font-weight: 500;
-      color: #6b21a8;
-      transition: color 0.3s ease;
-      text-decoration: none;
-    }
-
-    nav a:hover {
-      color: #9333ea;
-    }
-
-    .btn-primary, .btn-success {
-      background: linear-gradient(to right, #9333ea, #ec4899);
-      border: none;
-    }
-
-    .btn-primary:hover, .btn-success:hover {
-      background: linear-gradient(to right, #7e22ce, #db2777);
-    }
-
-    section {
-      background: white;
-      border-radius: 1rem;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-      margin-bottom: 2rem;
-      padding: 3rem 2rem;
-    }
-
-    .hero-section {
-      background: transparent;
-      box-shadow: none;
-    }
-
-    .hero-section h1 {
-      font-size: 3rem;
-      font-weight: 800;
-      color: #6b21a8;
-    }
-
-    .hero-slogan {
-      font-size: 1.25rem;
-      color: #4b5563;
-      font-weight: 500;
-    }
-
-    footer {
-      color: #6b7280;
-    }
-  </style>
+  <!-- Core CSS -->
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/fontawesome.css"> <!-- Remove if not using icons -->
+  <link rel="stylesheet" href="css/landing.css">  <!-- Custom overrides and page styles -->
 </head>
 <body>
+
+  <!-- Header -->
   <header class="main-header py-3">
     <div class="container d-flex justify-content-between align-items-center">
-      <img src="images/streakmaster-logo-updated.png" alt="Streak Master Logo" class="logo-img" />
+      <img src="images/streakmaster-logo.png" alt="Streak Master Logo" class="logo-img">
       <nav>
-        <a href="#home" class="mx-3">Home</a>
-        <a href="#about" class="mx-3">About</a>
-        <a href="#features" class="mx-3">Features</a>
-        <a href="#faq" class="mx-3">FAQ</a>
-        <a href="#contact" class="mx-3">Contact</a>
-        <a href="http://localhost:3000/register" class="btn btn-success ms-4">Get Started</a>
+        <ul class="list-unstyled d-flex mb-0">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+        <a href="/register" class="btn btn-success ms-4">Get Started</a>
       </nav>
     </div>
   </header>
 
-  <section id="home" class="hero-section text-center py-5">
-    <div class="container">
-      <h1>Build Your Habits. Break Your Limits.</h1>
-      <p class="hero-slogan mt-3">Welcome to Streak Master - your personal streak-tracking partner for better consistency and success.</p>
-      <a href="http://localhost:3000/register" class="btn btn-primary btn-lg mt-4">Start Tracking</a>
-    </div>
-  </section>
+  <!-- Sections (hero, about, features, faq, contact) -->
+  <main>
+    <!-- Hero -->
+    <section id="home" class="hero-section text-center py-5">
+      <div class="container">
+        <h1>Build Your Habits. Break Your Limits.</h1>
+        <p class="hero-slogan mt-3">Your personal streak-tracking partner for consistency and success.</p>
+        <a href="/register" class="btn btn-primary btn-lg mt-4">Start Tracking</a>
+      </div>
+    </section>
 
-  <section id="about">
-    <div class="container">
-      <h2 class="mb-4 text-purple-700">About Us</h2>
-      <p>Streak Master helps you stay committed by visually tracking your daily habits like exercising, reading, or drinking water. Build momentum with style!</p>
-    </div>
-  </section>
+    <!-- About -->
+    <section id="about">
+      <div class="container">
+        <h2>About Us</h2>
+        <p>Track daily habits like exercising, reading, or drinking water. Build momentum with style!</p>
+      </div>
+    </section>
 
-  <section id="features">
-    <div class="container">
-      <h2 class="mb-4 text-purple-700">What You'll Love</h2>
-      <ul>
-        <li>✅ Beautifully designed dashboard to monitor habit streaks</li>
-        <li>✅ Friendly user experience with motivating visuals</li>
-        <li>✅ Works on desktop and mobile</li>
-        <li>✅ Free to use, always</li>
-      </ul>
-    </div>
-  </section>
+    <!-- Features -->
+    <section id="features">
+      <div class="container">
+        <h2>What You'll Love</h2>
+        <ul>
+          <li>Beautiful dashboard to monitor habit streaks</li>
+          <li>Friendly UX with motivating visuals</li>
+          <li>Responsive on desktop & mobile</li>
+          <li>Free to use</li>
+        </ul>
+      </div>
+    </section>
 
-  <section id="faq">
-    <div class="container">
-      <h2 class="mb-4 text-purple-700">Frequently Asked Questions</h2>
-      <p><strong>Q:</strong> Do I need an account to track habits? <br><strong>A:</strong> Yes, register to save your streaks.</p>
-      <p><strong>Q:</strong> Is Streak Master free? <br><strong>A:</strong> 100% free for all users.</p>
-      <p><strong>Q:</strong> Can I use it on my phone? <br><strong>A:</strong> Yes! It’s fully responsive.</p>
-    </div>
-  </section>
+    <!-- FAQ -->
+    <section id="faq">
+      <div class="container">
+        <h2>FAQ</h2>
+        <dl>
+          <dt>Do I need an account?</dt>
+          <dd>Yes—register to save your streaks.</dd>
 
-  <section id="contact">
-    <div class="container">
-      <h2 class="mb-4 text-purple-700">Contact Us</h2>
-      <p>Email: support@streakmaster.com</p>
-      <p>Phone: +968-123-4567</p>
-      <p>Location: Muscat, Oman</p>
-    </div>
-  </section>
-  <iframe src="https://bot.orimon.ai/?tenantId=0bf460a4-f3ac-4472-a370-ea0ac73ed425&fullScreenBot=true" height="100%" width="100%" frameBorder="0" border="none"></iframe>
+          <dt>Is Streak Master free?</dt>
+          <dd>Yes, 100% free.</dd>
 
+          <dt>Is it mobile-friendly?</dt>
+          <dd>Absolutely—fully responsive.</dd>
+        </dl>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact">
+      <div class="container">
+        <h2>Contact Us</h2>
+        <address>
+          <p>Email: <a href="mailto:support@streakmaster.com">support@streakmaster.com</a></p>
+          <p>Phone: +968‑123‑4567</p>
+          <p>Location: Muscat, Oman</p>
+        </address>
+      </div>
+    </section>
+  </main>
 
   
-  <footer class="text-center py-4 mt-4">
-    <p class="mb-0">&copy; 2025 Streak Master. All rights reserved.</p>
+  <div id="chatbot-container"></div>
+
+  <!-- Footer -->
+  <footer class="text-center py-4">
+    <p>&copy; 2025 Streak Master. All rights reserved.</p>
   </footer>
 
+  <!-- Scripts -->
   <script src="js/bootstrap.bundle.min.js"></script>
-  <script src="https://bot.orimon.ai/deploy/index.js" tenantId="0bf460a4-f3ac-4472-a370-ea0ac73ed425"></script>
-
-
+  <script src="js/chatbot-widget.js"></script>
 </body>
 </html>
