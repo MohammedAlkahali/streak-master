@@ -1,0 +1,44 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Top-level habits
+    match /habits/{habitId} {
+      
+      // Create a new habit only if authenticated user == userId in data
+      allow create: if request.auth != null
+        && request.auth.uid == request.resource.data.userId
+        && request.resource.data.streak == 0;
+      
+      // Read/update/delete only for owner
+      allow read, update, delete: if request.auth != null
+        && request.auth.uid == resource.data.userId;
+      
+      // Now also lock down the logs sub-collection:
+      match /logs/{logId} {
+        // Allow creation of a log only if you own the parent habit
+        allow create: if request.auth != null
+          && request.auth.uid == get(
+               /databases/$(database)/documents/habits/$(habitId)
+             ).data.userId;
+        // Allow reads if you own it
+        allow read: if request.auth != null
+          && request.auth.uid == get(
+               /databases/$(database)/documents/habits/$(habitId)
+             ).data.userId;
+      }
+    }
+
+    // 🔒 Reminders Collection
+    match /reminders/{reminderId} {
+      // Only the creator can add a reminder with their own userId
+      allow create: if request.auth != null
+        && request.auth.uid == request.resource.data.userId;
+      
+      // Only the owner can read, update or delete
+      allow read, update, delete: if request.auth != null
+        && request.auth.uid == resource.data.userId;
+    }
+
+  }
+}

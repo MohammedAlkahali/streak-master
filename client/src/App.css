@@ -1,0 +1,67 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* —— Calendar Heatmap Overrides —— */
+
+/* make sure the default heatmap styles are loaded */
+@import 'react-calendar-heatmap/dist/styles.css';
+
+/* shrink each day square */
+.react-calendar-heatmap .react-calendar-heatmap-value {
+  width: 8px !important;
+  height: 8px !important;
+  stroke: #fff;
+  stroke-width: 1px;
+}
+
+/* tighten up the columns (gutters) */
+.react-calendar-heatmap .react-calendar-heatmap-week {
+  margin-right: 2px;
+}
+
+/* hide weekday labels for a cleaner look */
+.react-calendar-heatmap .react-calendar-heatmap-weekday-label {
+  display: none;
+}
+
+/* style month labels smaller & purple */
+.react-calendar-heatmap .react-calendar-heatmap-month-label {
+  font-size: 0.75rem;
+  fill: #6b21a8;
+}
