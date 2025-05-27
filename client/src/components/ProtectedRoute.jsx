@@ -1,23 +1,31 @@
-import React from "react";
-import { Navigate, useLocation } from "react-router-dom";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "../firebase"; // adjust path if needed
+import React from 'react';
+import { Navigate, useLocation } from 'react-router-dom';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../firebase';
 
-const ProtectedRoute = ({ children }) => {
-  const [user, loading] = useAuthState(auth);
-  const location = useLocation();
+/**
+ * ProtectedRoute wraps routes/components that require authentication and email verification.
+ * - Shows loading while auth state is initializing.
+ * - Redirects to home if not authenticated.
+ * - Redirects to verify-email if email is unverified.
+ * - Otherwise renders child components.
+ */
+export default function ProtectedRoute({ children }) {
+  const [user, loading] = useAuthState(auth);      // Firebase auth state and loading flag
+  const location = useLocation();                   // Current route location
 
+  // While checking authentication, show a loading indicator
   if (loading) {
-    return <div>Loading…</div>;
+    return <div className="text-center py-6">Loading…</div>;
   }
 
+  // If user is not logged in, redirect to homepage/login
   if (!user) {
-    // Not logged in → send to login (or home)
     return <Navigate to="/" replace />;
   }
 
+  // If user is logged in but hasn't verified their email, send to verify page
   if (!user.emailVerified) {
-    // Logged in but email not verified → send to verify-email
     return (
       <Navigate
         to="/verify-email"
@@ -27,8 +35,6 @@ const ProtectedRoute = ({ children }) => {
     );
   }
 
-  // All checks passed → render the protected page
-  return children;
-};
-
-export default ProtectedRoute;
+  // All checks passed: render protected content
+  return <>{children}</>;
+}

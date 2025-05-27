@@ -4,24 +4,60 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contact - Streak Master</title>
+  <!-- Bootstrap CSS for responsive layout -->
   <link rel="stylesheet" href="css/bootstrap.min.css">
+  <!-- FontAwesome for icons -->
   <link rel="stylesheet" href="css/fontawesome.css">
+  <!-- Custom landing page styles -->
   <link rel="stylesheet" href="css/landing.css">
 </head>
 <body>
-  <!-- Include same header/navigation as index.html -->
-  <header class="main-header py-3">…</header>
+  <!-- Header/nav (imported from index.html) -->
+  <header class="main-header py-3">
+    <div class="container d-flex justify-content-between align-items-center">
+      <a href="index.html" class="navbar-brand">
+        <img src="../images/streakmaster-logo-updated.png" alt="Streak Master Logo" height="50">
+      </a>
+      <nav>
+        <ul class="nav">
+          <li class="nav-item"><a class="nav-link" href="index.html#home">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html#about">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html#features">Features</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html#faq">FAQ</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html#contact">Contact</a></li>
+          <li class="nav-item"><a class="btn btn-success" href="register.html">Get Started</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
 
+  <!-- Main content -->
   <main class="container py-5">
-    <h1>Contact Us</h1>
+    <h1 class="mb-4">Contact Us</h1>
     <address>
-      <p>Email: <a href="mailto:support@streakmaster.com">support@streakmaster.com</a></p>
-      <p>Phone: +968‑123‑4567</p>
-      <p>Location: Muscat, Oman</p>
+      <p>
+        <i class="fas fa-envelope"></i>
+        <a href="mailto:support@streakmaster.com">support@streakmaster.com</a>
+      </p>
+      <p>
+        <i class="fas fa-phone"></i>
+        +968 &ndash; 123 &ndash; 4567
+      </p>
+      <p>
+        <i class="fas fa-map-marker-alt"></i>
+        Muscat, Oman
+      </p>
     </address>
   </main>
 
-  <footer class="text-center py-4">…</footer>
+  <!-- Footer (imported from index.html) -->
+  <footer class="text-center py-4 bg-light">
+    <div class="container">
+      <p class="mb-0">&copy; 2025 Streak Master. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS bundle includes Popper -->
   <script src="js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

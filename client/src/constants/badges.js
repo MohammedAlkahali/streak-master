@@ -1,4 +1,3 @@
-// src/constants/badges.js
 export const MILESTONES = [5, 10, 30, 100];
 
 export const BADGE_ICONS = {
