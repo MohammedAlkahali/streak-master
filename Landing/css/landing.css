@@ -116,10 +116,4 @@ footer {
   border: none;
 }
 
-/* Nudge the reCAPTCHA badge out of the way */
-.grecaptcha-badge {
-  position: fixed;  /* recaptcha already does this internally */
-  bottom: 20px !important; /* push it down to the very corner */
-  right: 20px !important;
-  z-index: 2000 !important;
-}
+

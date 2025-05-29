@@ -34,12 +34,8 @@ import { useUserReminders, deleteReminder as deleteReminderService } from '../se
 
 export default function Dashboard() {
   const navigate = useNavigate();
-
-  // --- AUTH & USER META ---
   const [user, setUser] = useState(null);
   const [username, setUsername] = useState('');
-
-  // --- HABITS STATE ---
   const [habits, setHabits] = useState([]);
   const [logs, setLogs] = useState({});
   const [newHabit, setNewHabit] = useState('');
@@ -47,13 +43,11 @@ export default function Dashboard() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editMode, setEditMode] = useState(null);
   const [editDuration, setEditDuration] = useState('');
-
-  // --- EMAIL MODAL ---
   const [showEmailModal, setShowEmailModal] = useState(false);
 
-  // --- REMINDERS STATE via hook ---
-  const reminders = useUserReminders();
+  // Reminders state
   const [showRemindersModal, setShowRemindersModal] = useState(false);
+  const reminders = useUserReminders();
 
   // Inject custom heatmap styles
   useEffect(() => {
@@ -76,21 +70,20 @@ export default function Dashboard() {
     return () => document.head.removeChild(style);
   }, []);
 
-  // Auth & load habits
+  // Auth + fetch habits
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, currentUser => {
+    const unsub = onAuthStateChanged(auth, (currentUser) => {
       if (!currentUser) {
         navigate('/');
         return;
       }
       setUser(currentUser);
       setUsername(localStorage.getItem('username') || currentUser.email);
-
       const q = query(
         collection(db, 'habits'),
         where('userId', '==', currentUser.uid)
       );
-      const unsubSnap = onSnapshot(q, snap => {
+      const unsubSnap = onSnapshot(q, (snap) => {
         setHabits(snap.docs.map(d => ({ id: d.id, ...d.data() })));
       });
       return () => unsubSnap();
@@ -98,7 +91,7 @@ export default function Dashboard() {
     return () => unsub();
   }, [navigate]);
 
-  // Load last 30 logs for each habit
+  // Fetch last 30 logs for heatmaps
   useEffect(() => {
     if (!user) return;
     const handlers = habits.map(h => {
@@ -121,7 +114,7 @@ export default function Dashboard() {
     return () => handlers.forEach(unsub => unsub());
   }, [user, habits]);
 
-  // Add a new habit
+  // Add new habit
   const addHabit = async () => {
     if (!newHabit || !newHabitDuration || !user) return;
     await addDoc(collection(db, 'habits'), {
@@ -138,7 +131,7 @@ export default function Dashboard() {
     setIsModalOpen(false);
   };
 
-  // Increment streak & log
+  // Increment streak + award badge + log
   const incrementStreak = async h => {
     const ref = doc(db, 'habits', h.id);
     const newStreak = h.streak + 1;
@@ -149,7 +142,7 @@ export default function Dashboard() {
     await addDoc(collection(ref, 'logs'), { timestamp: serverTimestamp() });
   };
 
-  // Reset, edit, delete habit
+  // Reset, edit, delete, logout
   const resetStreak = async h => {
     if (window.confirm('Reset this streak?')) {
       await updateDoc(doc(db, 'habits', h.id), { streak: 0, updatedAt: serverTimestamp() });
@@ -168,19 +161,6 @@ export default function Dashboard() {
       await deleteDoc(doc(db, 'habits', id));
     }
   };
-
-  // Delete a reminder
-  const handleDeleteReminder = async id => {
-    if (!window.confirm('Delete this reminder?')) return;
-    try {
-      await deleteReminderService(id);
-    } catch (err) {
-      console.error('Failed to delete reminder', err);
-      alert('Could not delete reminder. Please try again.');
-    }
-  };
-
-  // Logout & change email
   const handleLogout = async () => {
     await signOut(auth);
     localStorage.removeItem('username');
@@ -189,8 +169,8 @@ export default function Dashboard() {
 
   // Helpers
   const calculateProgress = (streak, duration) => {
-    const percent = duration ? Math.min(100, Math.round((streak / duration) * 100)) : 0;
-    return { percent, goalMet: streak >= duration };
+    const p = duration ? Math.min(100, Math.round((streak / duration) * 100)) : 0;
+    return { percent: p, goalMet: streak >= duration };
   };
   const shiftDate = (d, days) => {
     const dt = new Date(d);
@@ -209,17 +189,23 @@ export default function Dashboard() {
           Welcome, <strong>{username}</strong>
         </p>
         <div className="mt-4 flex gap-2">
-          <button onClick={handleLogout} className="btn btn-danger">
+          <button
+            onClick={handleLogout}
+            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-full"
+          >
             Logout
           </button>
-          <button onClick={() => setShowEmailModal(true)} className="btn btn-primary">
+          <button
+            onClick={() => setShowEmailModal(true)}
+            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-full"
+          >
             Change Email
           </button>
         </div>
       </header>
 
       {/* Motivation Banner */}
-      <section className="mb-6 p-4 bg-purple-50 text-purple-700 rounded-xl text-center font-bold">
+      <section className="mb-6 p-4 bg-purple-50 text-purple-700 rounded-xl text-center font-bold text-lg">
         Ignite your streak, fuel your ambition, and win every single day! 🔥
       </section>
 
@@ -229,63 +215,92 @@ export default function Dashboard() {
           const { percent, goalMet } = calculateProgress(h.streak, h.duration);
           const isEditing = editMode === h.id;
           return (
-            <div key={h.id} className="habit-card">
-              <div className="card-header d-flex justify-content-between">
+            <div
+              key={h.id}
+              className="bg-white rounded-2xl shadow-lg p-6 transform hover:scale-105 transition border-t-4 border-purple-400"
+            >
+              {/* Title / Edit */}
+              <div className="flex justify-between items-center mb-2">
                 {isEditing ? (
-                  <div className="w-100">
+                  <div className="flex-1">
                     <input
                       defaultValue={h.name}
                       onBlur={e => editHabit(h.id, e.target.value, editDuration)}
-                      className="form-control mb-1"
+                      className="w-full text-lg font-bold text-purple-600 border-b focus:outline-none"
                     />
                     <input
                       defaultValue={h.duration}
                       type="number"
+
                       onBlur={e => setEditDuration(e.target.value)}
-                      className="form-control"
+                      className="w-full text-sm text-gray-500 border-b focus:outline-none mt-1"
                     />
                   </div>
                 ) : (
-                  <h2>{h.name}</h2>
+                  <h2 className="text-xl font-bold text-purple-600">{h.name}</h2>
                 )}
-                <div className="icon-group">
-                  <FaEdit onClick={() => { setEditMode(h.id); setEditDuration(h.duration.toString()); }} />
-                  <FaTrashAlt onClick={() => deleteHabit(h.id)} />
+                <div className="flex gap-2 ml-4">
+                  <FaEdit
+                    onClick={() => {
+                      setEditMode(h.id);
+                      setEditDuration(h.duration.toString());
+                    }}
+                    className="text-blue-500 hover:text-blue-700 cursor-pointer"
+                  />
+                  <FaTrashAlt
+                    onClick={() => deleteHabit(h.id)}
+                    className="text-red-500 hover:text-red-700 cursor-pointer"
+                  />
                 </div>
               </div>
 
-              <p>Goal: {h.duration} days</p>
-              <div className="d-flex align-items-center mb-2">
-                <FaFireAlt /> <span className="ms-2">{h.streak} day streak</span>
+              {/* Stats */}
+              <p className="text-sm text-gray-500 mb-1">Goal: {h.duration} days</p>
+              <div className="flex items-center gap-2 mb-1 text-sm text-gray-600">
+                <FaFireAlt className="text-orange-400" />
+                <span>{h.streak} day streak</span>
               </div>
-              <p>Progress: {percent}%</p>
-              {goalMet && <p className="text-success">🎉 Goal Achieved!</p>}
+              <p className="text-xs text-gray-500 mb-1">Progress: {percent}%</p>
+              {goalMet && <p className="text-green-600 font-semibold">🎉 Goal Achieved!</p>}
 
-              <div className="badge-bar">
+              {/* Badges */}
+              <div className="flex items-center gap-2 mt-2 mb-2">
                 {h.badges?.map(ms => (
-                  <span key={ms} title={`Unlocked ${ms}-day badge!`}>
+                  <span
+                    key={ms}
+                    className="text-xl transition-transform hover:scale-110"
+                    title={`Unlocked ${ms}-day badge!`}
+                  >
                     {BADGE_ICONS[ms]}
                   </span>
                 ))}
               </div>
 
+              {/* Heatmap */}
               {logs[h.id] && (
-                <CalendarHeatmap
-                  startDate={shiftDate(new Date(), -29)}
-                  endDate={new Date()}
-                  values={logs[h.id]}
-                  gutterSize={2}
-                  cellSize={8}
-                  showWeekdayLabels={false}
-                  showMonthLabels={false}
-                  titleForValue={v => (v && v.date ? `${v.date}: ${v.count}` : 'No activity')}
-                  classForValue={v => (!v ? 'color-empty' : `color-github-${Math.min(v.count, 4)}`)}
-                />
+                <div className="mt-4">
+                  <CalendarHeatmap
+                    startDate={shiftDate(new Date(), -29)}
+                    endDate={new Date()}
+                    values={logs[h.id]}
+                    gutterSize={2}
+                    cellSize={8}
+                    showWeekdayLabels={false}
+                    showMonthLabels={false}
+                    titleForValue={value =>
+                      value && value.date ? `${value.date}: ${value.count} day(s)` : 'No activity'
+                    }
+                    classForValue={value =>
+                      !value ? 'color-empty' : `color-github-${Math.min(value.count, 4)}`
+                    }
+                  />
+                </div>
               )}
 
-              <div className="progress mt-3 mb-3">
+              {/* Progress Bar */}
+              <div className="w-full bg-gray-200 h-2 rounded-full mt-3 mb-4">
                 <div
-                  className="progress-bar"
+                  className="h-2 rounded-full"
                   style={{
                     width: `${percent}%`,
                     background: 'linear-gradient(to right,#a78bfa,#f472b6)',
@@ -293,12 +308,19 @@ export default function Dashboard() {
                 />
               </div>
 
-              <div className="d-flex gap-2">
-                <button onClick={() => incrementStreak(h)} className="btn btn-success flex-fill">
+              {/* Actions */}
+              <div className="flex gap-2">
+                <button
+                  onClick={() => incrementStreak(h)}
+                  className="flex-1 bg-green-500 hover:bg-green-600 text-white py-1 rounded"
+                >
                   +1 Day
                 </button>
-                <button onClick={() => resetStreak(h)} className="btn btn-warning flex-fill">
-                  <FaUndo /> Reset
+                <button
+                  onClick={() => resetStreak(h)}
+                  className="flex-1 bg-yellow-500 hover:bg-yellow-600 text-white py-1 rounded"
+                >
+                  <FaUndo className="inline mr-1" /> Reset
                 </button>
               </div>
             </div>
@@ -307,49 +329,67 @@ export default function Dashboard() {
       </div>
 
       {/* Add Habit FAB */}
-      <button onClick={() => setIsModalOpen(true)} className="fab-add">
+      <button
+        onClick={() => setIsModalOpen(true)}
+        className="fixed top-6 right-6 bg-purple-500 hover:bg-purple-600 text-white p-4 rounded-full shadow-lg flex items-center gap-2"
+      >
         <FaPlus /> Add Habit
       </button>
 
       {/* Reminders FAB */}
-      <button onClick={() => setShowRemindersModal(true)} className="fab-reminder">
+      <button
+        onClick={() => setShowRemindersModal(true)}
+        className="fixed top-20 right-6 bg-blue-500 hover:bg-blue-600 text-white p-4 rounded-full shadow-lg flex items-center gap-2"
+      >
         🕒 Reminders
       </button>
 
       {/* Reminders Modal */}
       {showRemindersModal && (
         <RemindersModal
-          reminders={reminders}
-          onDelete={handleDeleteReminder}
+          habits={habits}
+          isOpen={showRemindersModal}
           onClose={() => setShowRemindersModal(false)}
         />
       )}
 
       {/* Add Habit Modal */}
       {isModalOpen && (
-        <div className="modal-backdrop">
-          <div className="modal-content">
-            <FaTimes onClick={() => setIsModalOpen(false)} className="modal-close" />
-            <h2>Add New Habit</h2>
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center">
+          <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-sm relative">
+            <FaTimes
+              onClick={() => setIsModalOpen(false)}
+              className="absolute top-3 right-3 text-gray-500 hover:text-red-500 cursor-pointer"
+            />
+            <h2 className="text-xl font-bold mb-4 text-center">Add New Habit</h2>
             <input
               type="text"
               placeholder="Habit name"
               value={newHabit}
               onChange={e => setNewHabit(e.target.value)}
+              className="w-full mb-3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-purple-400"
             />
             <input
               type="number"
               placeholder="Duration (days)"
               value={newHabitDuration}
               onChange={e => setNewHabitDuration(e.target.value)}
+              className="w-full mb-4 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-purple-400"
             />
-            <button onClick={addHabit}>Add Habit</button>
+            <button
+              onClick={addHabit}
+              className="w-full bg-purple-600 hover:bg-purple-700 text-white p-2 rounded"
+            >
+              Add Habit
+            </button>
           </div>
         </div>
       )}
 
       {/* Change Email Modal */}
-      {showEmailModal && <ChangeEmailModal onClose={() => setShowEmailModal(false)} />}
+      {showEmailModal && (
+        <ChangeEmailModal onClose={() => setShowEmailModal(false)} />
+      )}
     </div>
   );
 }

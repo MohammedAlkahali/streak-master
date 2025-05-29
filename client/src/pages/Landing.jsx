@@ -68,7 +68,7 @@ function Landing() {
         <div className="container mx-auto">
           <h2 className="text-3xl font-bold text-purple-700 mb-4">Contact Us</h2>
           <p>Email: support@streakmaster.com</p>
-          <p>Phone: +968-123-4567</p>
+          <p>Phone: +968-9460-9441</p>
           <p>Location: Muscat, Oman</p>
         </div>
       </section>
