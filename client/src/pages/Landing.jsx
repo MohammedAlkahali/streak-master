@@ -67,7 +67,7 @@ function Landing() {
       <section id="contact" className="py-16 px-4 bg-purple-50">
         <div className="container mx-auto">
           <h2 className="text-3xl font-bold text-purple-700 mb-4">Contact Us</h2>
-          <p>Email: support@streakmaster.com</p>
+          <p>Email: support-streakmaster@gmail.com</p>
           <p>Phone: +968-9460-9441</p>
           <p>Location: Muscat, Oman</p>
         </div>
