@@ -12,15 +12,7 @@ import {
   serverTimestamp,
 } from 'firebase/firestore';
 
-/**
- * reminderService: CRUD operations and hooks for managing reminders in Firestore.
- */
-
-/**
- * Create a new reminder for the current user.
- * @param {Object} reminderData - Fields: habitId, channel, time, frequency, daysOfWeek, messageTemplate.
- * @returns {Promise<string>} The Firestore document ID of the created reminder.
- */
+/*Create a new reminder for the current user.*/
 export async function createReminder(reminderData) {
   const reminderRef = await addDoc(collection(db, 'reminders'), {
     ...reminderData,
@@ -53,7 +45,7 @@ export function useUserReminders() {
       setReminders(data);
     });
 
-    // Cleanup subscription on unmount
+  
     return () => unsubscribe();
   }, []);
 
@@ -79,6 +71,7 @@ export async function updateReminder(id, updates) {
  * @param {string} id - Reminder document ID.
  * @returns {Promise<void>}
  */
+
 export async function deleteReminder(id) {
   const reminderRef = doc(db, 'reminders', id);
   await deleteDoc(reminderRef);

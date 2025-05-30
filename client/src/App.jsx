@@ -15,17 +15,17 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Public pages */}
+        {/*Public pages*/}
         <Route path="/"                  element={<Landing />} />
         <Route path="/register"          element={<Register />} />
         <Route path="/login"             element={<Login />} />
         <Route path="/forgot-password"   element={<ForgotPassword />} />
         <Route path="/reset-password"    element={<ResetPassword />} />
 
-        {/* “Please verify your email” page */}
+        {}
         <Route path="/verify-email"      element={<VerifyEmail />} />
 
-        {/* Protected: only signed-in & email-verified users can see Dashboard */}
+        {}
         <Route
           path="/dashboard"
           element={
@@ -35,7 +35,7 @@ function App() {
           }
         />
 
-        {/* Fallback: any unknown URL → Landing */}
+        {}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>

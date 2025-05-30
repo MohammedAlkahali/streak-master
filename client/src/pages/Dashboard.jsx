@@ -1,4 +1,3 @@
-// src/pages/Dashboard.jsx
 import React, { useState, useEffect } from 'react';
 import CalendarHeatmap from 'react-calendar-heatmap';
 import 'react-calendar-heatmap/dist/styles.css';
@@ -54,8 +53,8 @@ export default function Dashboard() {
     const style = document.createElement('style');
     style.innerHTML = `
       .react-calendar-heatmap rect {
-        width: 8px !important;
-        height: 8px !important;
+        width: 6px !important;
+        height: 6px !important;
         shape-rendering: crispEdges;
         stroke: #fff;
         stroke-width: 1px;
